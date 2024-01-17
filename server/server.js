@@ -22,9 +22,13 @@ app.post("/", async (request, response) => {
   const post = request.body.post;
 
   const newPost = await db.query("INSERT INTO message_board (username, post) VALUES ($1, $2) RETURNING *", [username, post]);
-  // return newPost.rows[0];
   response.json(newPost.rows[0]);
-  // response.json(newPost);
+});
+
+app.delete("/:id", async (request, response) => {
+  const recordId = request.params.id;
+  const result = await db.query("DELETE FROM message_board WHERE id = $1", [recordId]);
+  response.json(result.rows[0]);
 });
 
 app.listen(8080, function () {
